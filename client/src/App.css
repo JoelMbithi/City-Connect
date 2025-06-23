@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+:root {
+  --nairobi-green: #007A33;
+  --nairobi-gold: #FFD100;
+  --nairobi-black: #000000;
+  --nairobi-white: #FFFFFF;
+}
+
+@keyframes spinWithPause {
+  0% {
+    transform: rotate(0deg);
+  }
+  80% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spin-pause {
+  animation: spinWithPause 6s linear infinite;
+}
