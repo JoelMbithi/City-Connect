@@ -33,7 +33,7 @@ const AdminNavbar = () => {
               <Link to="/notice" className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/notices')}`}>Notices</Link>
               <Link to="/events" className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/events')}`}>Events</Link>
               <Link to="feedback" className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/admin/feedback')}`}>Feedback</Link>
-              <Link to="/admin/newsletter" className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/admin/newsletter')}`}>Newsletter</Link>
+              <Link to="/newsletter" className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/admin/newsletter')}`}>Newsletter</Link>
             </div>
 
             <div className="ml-4 flex items-center space-x-4">

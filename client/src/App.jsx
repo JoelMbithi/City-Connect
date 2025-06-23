@@ -7,6 +7,7 @@ import Home from './Components/Home/Home';
 import Events from './Pages/Events';
 import Notice from './Pages/Notice';
 import Feedback from './Pages/Feedback';
+import NewsLetter from './Pages/NewsLetter';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         <Route path="events" element={<Events />} />
         <Route path="notice" element={<Notice />} />
         <Route path='feedback' element={<Feedback/>} />
+        <Route path='newsLetter' element={<NewsLetter/>} />
       </Routes>
 
       <Footer />
