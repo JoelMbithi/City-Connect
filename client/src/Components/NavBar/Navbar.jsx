@@ -15,8 +15,8 @@ const AdminNavbar = () => {
   };
 
   return (
-    <nav className="bg-[#007A33] text-white shadow-md sticky top-0 z-50 w-full">
-      <div className="px-4 md:px-8 xl:px-16 2xl:px-34">
+    <nav className="bg-[#007A33] text-white shadow-md sticky top-0 z-50 w-full ">
+      <div className="w-full  mx-auto px-4 md:px-8 xl:px-16 2xl:px-34">
         <div className="flex items-center justify-between h-16 w-full">
           {/* Logo/Brand */}
           <div className="flex-shrink-0 flex items-center">
@@ -27,17 +27,17 @@ const AdminNavbar = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex md:flex-1 md:items-center md:justify-between">
+          <div className="hidden md:flex md:flex-1   md:items-center md:justify-between">
             <div className="ml-10 flex items-center space-x-4">
-              <Link to="/admin/dashboard" className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/admin/dashboard')}`}>Dashboard</Link>
-              <Link to="/notice" className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/notices')}`}>Notices</Link>
+              <Link to="/admin/dashboard" className={` hidden lg:flex px-3 py-2 rounded-md text-sm font-medium ${isActive('dashboard')}`}>Dashboard</Link>
+              <Link to="/notice" className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/notice')}`}>Notices</Link>
               <Link to="/events" className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/events')}`}>Events</Link>
-              <Link to="feedback" className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/admin/feedback')}`}>Feedback</Link>
-              <Link to="/newsletter" className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/admin/newsletter')}`}>Newsletter</Link>
+              <Link to="feedback" className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/feedback')}`}>Feedback</Link>
+              <Link to="/newsletter" className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/newsletter')}`}>Newsletter</Link>
             </div>
 
             <div className="ml-4 flex items-center space-x-4">
-              <Link to="/" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">View Public Site</Link>
+              <Link to="/" className="hidden lg:flex text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">View Public Site</Link>
               <Link
                 to="/login"
                 className="bg-transparent hover:bg-[#FFD100] text-[#FFD100] hover:text-black px-3 py-2 rounded-md text-sm font-medium border border-[#FFD100]"
@@ -75,11 +75,11 @@ const AdminNavbar = () => {
       {isMobileMenuOpen && (
         <div className="md:hidden w-full" id="mobile-menu">
           <div className="px-4 pt-4 pb-3 space-y-2">
-            <Link to="/admin/dashboard" className={`block px-3 py-2 rounded-md text-base font-medium ${isActive('/admin/dashboard')}`} onClick={() => setIsMobileMenuOpen(false)}>Dashboard</Link>
-            <Link to="/admin/notices" className={`block px-3 py-2 rounded-md text-base font-medium ${isActive('/admin/notices')}`} onClick={() => setIsMobileMenuOpen(false)}>Notices</Link>
-            <Link to="/admin/events" className={`block px-3 py-2 rounded-md text-base font-medium ${isActive('/admin/events')}`} onClick={() => setIsMobileMenuOpen(false)}>Events</Link>
-            <Link to="/admin/feedback" className={`block px-3 py-2 rounded-md text-base font-medium ${isActive('/admin/feedback')}`} onClick={() => setIsMobileMenuOpen(false)}>Feedback</Link>
-            <Link to="/admin/newsletter" className={`block px-3 py-2 rounded-md text-base font-medium ${isActive('/admin/newsletter')}`} onClick={() => setIsMobileMenuOpen(false)}>Newsletter</Link>
+            <Link to="/dashboard" className={`block px-3 py-2 rounded-md text-base font-medium ${isActive('/dashboard')}`} onClick={() => setIsMobileMenuOpen(false)}>Dashboard</Link>
+            <Link to="/notice" className={`block px-3 py-2 rounded-md text-base font-medium ${isActive('/notices')}`} onClick={() => setIsMobileMenuOpen(false)}>Notices</Link>
+            <Link to="/events" className={`block px-3 py-2 rounded-md text-base font-medium ${isActive('/events')}`} onClick={() => setIsMobileMenuOpen(false)}>Events</Link>
+            <Link to="/feedback" className={`block px-3 py-2 rounded-md text-base font-medium ${isActive('/feedback')}`} onClick={() => setIsMobileMenuOpen(false)}>Feedback</Link>
+            <Link to="/newsletter" className={`block px-3 py-2 rounded-md text-base font-medium ${isActive('/newsletter')}`} onClick={() => setIsMobileMenuOpen(false)}>Newsletter</Link>
             <div className="border-t border-[#FFD100] pt-3">
               <Link to="/" className="block px-3 py-2 text-base text-gray-300 hover:text-white hover:bg-[#005e27]" onClick={() => setIsMobileMenuOpen(false)}>View Public Site</Link>
               <Link to="/login" className="block px-3 py-2 rounded-md text-base font-medium text-[#FFD100] hover:text-black hover:bg-[#FFD100]" onClick={() => setIsMobileMenuOpen(false)}>Login</Link>
