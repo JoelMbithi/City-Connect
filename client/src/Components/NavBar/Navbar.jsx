@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import LoginPopup from '../PopUp/LoginPopup';
 
 const AdminNavbar = () => {
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [popUp,setPopUp] = useState(false)
 
   const isActive = (path) =>
     location.pathname.includes(path)
@@ -13,7 +15,10 @@ const AdminNavbar = () => {
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
-
+//popup button to login
+  const handleShow = () => {
+    setPopUp((prev) => !prev)
+  }
   return (
     <nav className="bg-[#007A33] text-white shadow-md sticky top-0 z-50 w-full ">
       <div className="w-full  mx-auto px-4 md:px-8 xl:px-16 2xl:px-34">
@@ -36,15 +41,23 @@ const AdminNavbar = () => {
               <Link to="/newsletter" className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/newsletter')}`}>Newsletter</Link>
             </div>
 
-            <div className="ml-4 flex items-center space-x-4">
+           
+              <div className="ml-4 flex items-center space-x-4">
               <Link to="/" className="hidden lg:flex text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">View Public Site</Link>
+              
               <Link
                 to="/login"
+                onClick={handleShow}
                 className="bg-transparent hover:bg-[#FFD100] text-[#FFD100] hover:text-black px-3 py-2 rounded-md text-sm font-medium border border-[#FFD100]"
               >
                 Login
               </Link>
+          {/*  pop shadow */}
+           {popUp && (
+           <LoginPopup onClose={() => setShowPopup(false)} />
+           )}
             </div>
+            
           </div>
 
           {/* Mobile Menu Button */}

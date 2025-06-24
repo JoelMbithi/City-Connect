@@ -41,30 +41,30 @@ const EventsPage = () => {
       </div>
  
       {/* Add Event Form */}
-      <form onSubmit={handleAddEvent} className="flex flex-col md:flex mb-6 space-y-2  gap-4">
+      <form onSubmit={handleAddEvent} className="flex flex-col md:flex md:flex-row lg:flex-row mb-6 space-y-2  gap-4">
         <input
           type="text"
           placeholder="Event Title"
-          className="w-70 md:w-80 ring-2 ring-gray-400 p-2 rounded-md"
+          className="w-70 md:w-40  lg:w-80 xl:w-100 2xl:w-240 ring-2 ring-gray-400 p-2 rounded-md"
           value={newEvent.title}
           onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
         />
         <input
           type="date"
-          className="w-70 md:w-80 ring-2 ring-gray-400 p-2 rounded-md"
+          className="w-70 md:w-40 lg:w-80 xl:w-100 2xl:w-240 ring-2 ring-gray-400 p-2 rounded-md"
           value={newEvent.date}
           onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
         />
         <input
           type="text"
           placeholder="Location (optional)"
-          className="w-70 md:w-80 ring-2 ring-gray-400 p-2 rounded-md"
+          className="w-70 md:w-40 lg:w-80 xl:w-100 2xl:w-240 ring-2 ring-gray-400 p-2 rounded-md"
           value={newEvent.location}
           onChange={(e) => setNewEvent({ ...newEvent, location: e.target.value })}
         />
         <button
           type="submit"
-          className="bg-[#007A33] text-white px-4 py-2 rounded hover:bg-green-800"
+          className="w-70  md:w-40 bg-[#007A33] text-white  px-4 py-2 rounded hover:bg-green-800"
         >
           Add Event
         </button>
