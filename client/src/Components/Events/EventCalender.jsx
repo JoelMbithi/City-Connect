@@ -116,6 +116,7 @@ const EventCalendar = ({ events }) => {
                   <span className="inline-block w-2 h-2 bg-yellow-300 rounded-full mt-1.5 mr-2"></span>
                   Youth Empowerment Forum
                 </li>
+                {/*  */}
                 <li className="flex items-start">
                   <span className="inline-block w-2 h-2 bg-yellow-300 rounded-full mt-1.5 mr-2"></span>
                   Business Networking Mixer
