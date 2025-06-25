@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import LoginPopup from '../PopUp/LoginPopup';
 import DropdownLink from '../DropDown/DropDown';
+import logo from "../../assets/NairobiConnect.png"
 
 const AdminNavbar = () => {
   const location = useLocation();
@@ -35,7 +36,7 @@ const AdminNavbar = () => {
           <div className="flex-shrink-0 flex items-center">
             <Link to="/" className="flex items-center space-x-2">
               <span className="text-2xl">
-                <img className='h-12 w-12 rounded-full' src="https://sdmntprwestus.oaiusercontent.com/files/00000000-abfc-6230-b290-b2d1ef6579b9/raw?se=2025-06-25T13%3A10%3A36Z&sp=r&sv=2024-08-04&sr=b&scid=d3f3f6a8-3d84-5d90-a63a-c7abc88db9e5&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-06-25T08%3A36%3A21Z&ske=2025-06-26T08%3A36%3A21Z&sks=b&skv=2024-08-04&sig=YnfrIFfdM6iDSaIvxcvtRlC3fzLqDwTmAQuAoTEyIck%3D" alt="" />
+                <img className='h-12 w-12 rounded-full' src={logo} alt="" />
               </span>
              <span className="text-2xl font-bold">
   <span className="text-base text-yellow-400 mr-1 align-top">City</span>
