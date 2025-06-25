@@ -83,7 +83,7 @@ const NewsletterPage = () => {
         {newsletters.map((item, index) => (
           <li key={index} className="bg-white p-4 shadow rounded border border-gray-200">
             <div className="flex items-center justify-between">
-              <div>
+              <div> 
                 <h3 className="text-lg font-medium text-gray-800">{item.title}</h3>
                 <p className="text-sm text-gray-500">{item.date}</p>
               </div>

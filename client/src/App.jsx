@@ -8,6 +8,9 @@ import Events from './Pages/Events';
 import Notice from './Pages/Notice';
 import Feedback from './Pages/Feedback';
 import NewsLetter from './Pages/NewsLetter';
+import SupportPage from './Pages/Support';
+import RequestsPage from './Pages/Request';
+import ApplyForServicePage from './Pages/ApplyForService';
 
 const App = () => {
   return (
@@ -20,6 +23,9 @@ const App = () => {
         <Route path="notice" element={<Notice />} />
         <Route path='feedback' element={<Feedback/>} />
         <Route path='newsLetter' element={<NewsLetter/>} />
+        <Route path='support' element={<SupportPage/>} />
+        <Route path='requests' element={<RequestsPage/>} />
+        <Route path='apply' element={<ApplyForServicePage/>} />
       </Routes>
 
       <Footer />

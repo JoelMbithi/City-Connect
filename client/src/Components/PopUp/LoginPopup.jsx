@@ -7,8 +7,9 @@ const MODE = {
   VERIFY_EMAIL: "VERIFY_EMAIL"
 };
 
-const LoginPopup = () => {
+const LoginPopup = ({onClose}) => {
   const [mode, setMode] = useState(MODE.LOGIN);
+   const [showPopup,setShowPopup] = useState(false)
   const [form, setForm] = useState({
     username: "",
     email: "",
@@ -41,14 +42,17 @@ const LoginPopup = () => {
 
   return (
     <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="h-[calc(90vh-80px)] px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 flex items-center mt-10 justify-center">
-        
-        <form className="flex flex-col gap-8">
-          <h1 className="text-2xl font-semibold">{formTitle}</h1>
-
+      
+      <div className="h-[calc(90vh-80px)] px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 flex items-center mt-2 justify-center">
+       
+        <form className="flex flex-col gap-8 ring-2 p-4 rounded-md backdrop-blur  bg-green-700">
+         <div className='flex  flex-row  justify-between'>
+           <h1 className="text-2xl font-semibold">{formTitle}</h1>
+             <h1 onClick={onClose} className='top-2  right-0  text-lg font-semibold cursor-pointer text-white'>X</h1>
+         </div>
           {mode === MODE.REGISTER && (
             <div className="flex flex-col gap-2">
-              <label className="text-sm text-slate-400">Username</label>
+              <label className="text-sm text-white">Username</label>
               <input
                 className="ring-2 ring-gray-300 rounded-md p-4"
                 type="text"
@@ -57,12 +61,19 @@ const LoginPopup = () => {
                 value={form.username}
                 onChange={handleChange}
               />
+               <div className='flex mt-3 flex-row items-center justify-between'>
+                <label className="text-sm text-white">Role</label>
+              <select name="" id=""  className="ring-2 ring-gray-300 rounded-md p-2" >
+                <option value="" className=' bg-amber-400 text-white text-sm'>User</option>
+                <option value="" className='text-sm bg-amber-400 text-white '>Admin</option>
+              </select>
+               </div>
             </div>
           )}
 
           {mode !== MODE.VERIFY_EMAIL ? (
             <div className="flex flex-col gap-2">
-              <label className="text-sm text-slate-400">Email</label>
+              <label className="text-sm text-white">Email</label>
               <input
                 className="ring-2 ring-gray-300 rounded-md p-4"
                 type="email"
@@ -74,7 +85,7 @@ const LoginPopup = () => {
             </div>
           ) : (
             <div className="flex flex-col gap-2">
-              <label className="text-sm text-slate-400">Verification Code</label>
+              <label className="text-sm text-white">Verification Code</label>
               <input
                 className="ring-2 ring-gray-300 rounded-md p-4"
                 type="text"
@@ -88,7 +99,7 @@ const LoginPopup = () => {
 
           {(mode === MODE.LOGIN || mode === MODE.REGISTER) && (
             <div className="flex flex-col gap-2">
-              <label className="text-sm text-slate-400">Password</label>
+              <label className="text-sm text-white">Password</label>
               <input
                 className="ring-2 ring-gray-300 rounded-md p-4"
                 type="password"
@@ -111,7 +122,7 @@ const LoginPopup = () => {
 
           <button
             type="submit"
-            className="ring-2 bg-green-600 text-yellow-500 rounded-md p-2 disabled:bg-yellow-500"
+            className="ring-2 bg-green-600 text-yellow-500 hover:bg-yellow-500 hover:text-green-600  rounded-md p-2 disabled:bg-yellow-500"
           >
             {buttonTitle}
           </button>

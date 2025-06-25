@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import LoginPopup from '../PopUp/LoginPopup';
+import DropdownLink from '../DropDown/DropDown';
 
 const AdminNavbar = () => {
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [popUp,setPopUp] = useState(false)
+ 
+
+   
 
   const isActive = (path) =>
     location.pathname.includes(path)
@@ -16,17 +20,23 @@ const AdminNavbar = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 //popup button to login
-  const handleShow = () => {
-    setPopUp((prev) => !prev)
-  }
+
+  const handleShow = () => setPopUp(true)
+  
+//close popup
+
+  const handleClose = () => setPopUp(false)
+
   return (
     <nav className="bg-[#007A33] text-white shadow-md sticky top-0 z-50 w-full ">
       <div className="w-full  mx-auto px-4 md:px-8 xl:px-16 2xl:px-34">
         <div className="flex items-center justify-between h-16 w-full">
           {/* Logo/Brand */}
           <div className="flex-shrink-0 flex items-center">
-            <Link to="/admin/dashboard" className="flex items-center space-x-2">
-              <span className="text-2xl">🏙️</span>
+            <Link to="/" className="flex items-center space-x-2">
+              <span className="text-2xl">
+                <img className='h-12 w-12 rounded-full' src="https://sdmntprsouthcentralus.oaiusercontent.com/files/00000000-2ef0-61f7-921f-f47e1a0c13e3/raw?se=2025-06-25T08%3A18%3A37Z&sp=r&sv=2024-08-04&sr=b&scid=0f4d2189-bbe6-5ae6-aeed-282d9694e3cd&skoid=f28c0102-4d9d-4950-baf0-4a8e5f6cf9d4&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-06-25T06%3A06%3A37Z&ske=2025-06-26T06%3A06%3A37Z&sks=b&skv=2024-08-04&sig=KIOUUmyuLR%2BheWdaT3Ab3R6aJ6WqDOvnEtDNlxXeHb0%3D" alt="" />
+              </span>
               <span className="text-xl font-bold">CityConnect</span>
             </Link>
           </div>
@@ -34,19 +44,60 @@ const AdminNavbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex md:flex-1   md:items-center md:justify-between">
             <div className="ml-10 flex items-center space-x-4">
-              <Link to="/admin/dashboard" className={` hidden lg:flex px-3 py-2 rounded-md text-sm font-medium ${isActive('dashboard')}`}>Dashboard</Link>
-              <Link to="/notice" className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/notice')}`}>Notices</Link>
-              <Link to="/events" className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/events')}`}>Events</Link>
-              <Link to="feedback" className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/feedback')}`}>Feedback</Link>
-              <Link to="/newsletter" className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/newsletter')}`}>Newsletter</Link>
-            </div>
+  {/* Dashboard dropdown with subpages */}
+  <DropdownLink
+  className='hidden lg:flex'
+    label="Dashboard"
+    links={[
+      { name: 'Overview', to: '/admin/dashboard' },
+      { name: 'Analytics', to: '/admin/dashboard/analytics' },
+    ]}
+  />
+
+  {/* Notices dropdown */}
+  <DropdownLink
+    label="Notices"
+    links={[
+      { name: 'All Notices', to: '/notice' },
+      { name: 'Create Notice', to: '/notice/create' },
+    ]}
+  />
+
+  {/* Events dropdown (already added) */}
+  <DropdownLink
+    label="Events"
+    links={[
+      { name: 'All Events', to: '/events' },
+      { name: 'Create Event', to: '/events/create' },
+    ]}
+  />
+
+  {/* Feedback dropdown */}
+  <DropdownLink
+    label="Feedback"
+    links={[
+      { name: 'All Feedback', to: '/feedback' },
+      { name: 'Submit Feedback', to: '/feedback/create' },
+    ]}
+  />
+
+  {/* Newsletter dropdown */}
+  <DropdownLink
+    label="Newsletter"
+    links={[
+      { name: 'All Newsletters', to: '/newsletter' },
+      { name: 'Create Newsletter', to: '/newsletter/create' },
+    ]}
+  />
+</div>
+
 
            
               <div className="ml-4 flex items-center space-x-4">
               <Link to="/" className="hidden lg:flex text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">View Public Site</Link>
               
               <Link
-                to="/login"
+              
                 onClick={handleShow}
                 className="bg-transparent hover:bg-[#FFD100] text-[#FFD100] hover:text-black px-3 py-2 rounded-md text-sm font-medium border border-[#FFD100]"
               >
@@ -54,7 +105,7 @@ const AdminNavbar = () => {
               </Link>
           {/*  pop shadow */}
            {popUp && (
-           <LoginPopup onClose={() => setShowPopup(false)} />
+           <LoginPopup onClose={handleClose} />
            )}
             </div>
             
@@ -88,7 +139,7 @@ const AdminNavbar = () => {
       {isMobileMenuOpen && (
         <div className="md:hidden w-full" id="mobile-menu">
           <div className="px-4 pt-4 pb-3 space-y-2">
-            <Link to="/dashboard" className={`block px-3 py-2 rounded-md text-base font-medium ${isActive('/dashboard')}`} onClick={() => setIsMobileMenuOpen(false)}>Dashboard</Link>
+            <Link to="/" className={`block px-3 py-2 rounded-md text-base font-medium ${isActive('/dashboard')}`} onClick={() => setIsMobileMenuOpen(false)}>Dashboard</Link>
             <Link to="/notice" className={`block px-3 py-2 rounded-md text-base font-medium ${isActive('/notices')}`} onClick={() => setIsMobileMenuOpen(false)}>Notices</Link>
             <Link to="/events" className={`block px-3 py-2 rounded-md text-base font-medium ${isActive('/events')}`} onClick={() => setIsMobileMenuOpen(false)}>Events</Link>
             <Link to="/feedback" className={`block px-3 py-2 rounded-md text-base font-medium ${isActive('/feedback')}`} onClick={() => setIsMobileMenuOpen(false)}>Feedback</Link>
