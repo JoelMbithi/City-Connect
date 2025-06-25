@@ -28,10 +28,10 @@ const Footer = () => {
         <div>
           <h4 className="text-lg font-semibold mb-3">Quick Links</h4>
           <ul className="space-y-2">
-            {['Home', 'Notices', 'Events', 'Feedback', 'Contact'].map((item) => (
+            {['Home', 'Notice', 'Events', 'Feedback', 'Support'].map((item) => (
               <li key={item}>
                 <Link
-                  to={item === 'Home' ? '/' : `/admin/${item.toLowerCase()}`}
+                  to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
                   className="text-gray-200 hover:text-[#FFD100] transition-colors"
                 >
                   {item}

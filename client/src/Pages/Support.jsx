@@ -209,7 +209,7 @@ const SupportPage = () => {
           <div className="space-y-5">
             <div className="flex items-start">
               <div className="bg-[#007A33]/10 p-3 rounded-full mr-4">
-                <FiMail className="text-[#007A33] text-lg" />
+                <FiMail className="text-blue-600 text-lg" />
               </div>
               <div>
                 <h3 className="font-medium text-gray-800">Email</h3>
@@ -220,7 +220,7 @@ const SupportPage = () => {
             
             <div className="flex items-start">
               <div className="bg-[#007A33]/10 p-3 rounded-full mr-4">
-                <FiPhone className="text-[#007A33] text-lg" />
+                <FiPhone className="text-green-600 text-lg" />
               </div>
               <div>
                 <h3 className="font-medium text-gray-800">Phone</h3>
@@ -231,7 +231,7 @@ const SupportPage = () => {
             
             <div className="flex items-start">
               <div className="bg-[#007A33]/10 p-3 rounded-full mr-4">
-                <FiMapPin className="text-[#007A33] text-lg" />
+                <FiMapPin className=" text-red-500 text-lg" />
               </div>
               <div>
                 <h3 className="font-medium text-gray-800">Address</h3>
@@ -242,7 +242,7 @@ const SupportPage = () => {
             
             <div className="flex items-start">
               <div className="bg-[#007A33]/10 p-3 rounded-full mr-4">
-                <FiClock className="text-[#007A33] text-lg" />
+                <FiClock className="text-orange-400 text-lg" />
               </div>
               <div>
                 <h3 className="font-medium text-gray-800">Working Hours</h3>

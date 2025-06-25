@@ -142,13 +142,13 @@ const UserDashboard = () => {
 <SummaryCard 
   title="Pending Requests" 
   count={1} 
-  icon={<FiClock size={20} />} 
+  icon={<FiClock size={20} className='text-orange-500' />} 
   color="orange" 
 />
 <SummaryCard 
   title="Notifications" 
   count={2} 
-  icon={<FiBell size={20} />} 
+  icon={<FiBell size={20}  className='text-red-600' />} 
   color="purple" 
 />
 <SummaryCard 
@@ -166,25 +166,25 @@ const UserDashboard = () => {
           <div className="grid grid-cols-2 gap-4">
            <QuickLink 
   title="Apply for Service" 
-  icon={<FiEdit size={18} />} 
+  icon={<FiEdit size={18} className='text-black ' />} 
   link="/apply" 
   color="blue" 
 />
 <QuickLink 
   title="My Requests" 
-  icon={<FiFile size={18} />} 
+  icon={<FiFile size={18} className='text-orange-400'/>} 
   link="/requests" 
   color="green" 
 />
 <QuickLink 
   title="Upcoming Events" 
-  icon={<FiCalendar size={18} />} 
+  icon={<FiCalendar size={18} className='text-red-600'/>} 
   link="/events" 
   color="purple" 
 />
 <QuickLink 
   title="Support" 
-  icon={<FiMessageCircle size={18} />} 
+  icon={<FiMessageCircle size={18} className='text-green-400' />} 
   link="/support" 
   color="orange" 
 />

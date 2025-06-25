@@ -130,7 +130,7 @@ const ApplyForServicePage = () => {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block font-medium mb-2 text-gray-700">Service Type*</label>
+                <label className="block font-medium mb-2 text-gray-700">Service Type <span className='text-red-500'>*</span></label>
                 <select
                   name="serviceType"
                   value={form.serviceType}
@@ -147,7 +147,7 @@ const ApplyForServicePage = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-medium mb-2 text-gray-700">Full Name*</label>
+                  <label className="block font-medium mb-2 text-gray-700">Full Name <span className='text-red-500'>*</span></label>
                   <input 
                     type="text" 
                     name="fullName" 
@@ -159,7 +159,7 @@ const ApplyForServicePage = () => {
                   />
                 </div>
                 <div>
-                  <label className="block font-medium mb-2 text-gray-700">ID/Passport Number*</label>
+                  <label className="block font-medium mb-2 text-gray-700">ID/Passport Number <span className='text-red-500'>*</span></label>
                   <input 
                     type="text" 
                     name="idNumber" 
@@ -171,7 +171,7 @@ const ApplyForServicePage = () => {
                   />
                 </div>
                 <div>
-                  <label className="block font-medium mb-2 text-gray-700">Phone Number*</label>
+                  <label className="block font-medium mb-2 text-gray-700">Phone Number  <span className='text-red-500'>*</span></label>
                   <input 
                     type="tel" 
                     name="phone" 
@@ -183,7 +183,7 @@ const ApplyForServicePage = () => {
                   />
                 </div>
                 <div>
-                  <label className="block font-medium mb-2 text-gray-700">Email Address*</label>
+                  <label className="block font-medium mb-2 text-gray-700">Email Address <span className='text-red-500'>*</span></label>
                   <input 
                     type="email" 
                     name="email" 
@@ -197,7 +197,7 @@ const ApplyForServicePage = () => {
               </div>
 
               <div>
-                <label className="block font-medium mb-2 text-gray-700">Address / Location*</label>
+                <label className="block font-medium mb-2 text-gray-700">Address / Location <span className='text-red-500'>*</span></label>
                 <input 
                   type="text" 
                   name="address" 
@@ -210,7 +210,7 @@ const ApplyForServicePage = () => {
               </div>
 
               <div>
-                <label className="block font-medium mb-2 text-gray-700">Reason for Application*</label>
+                <label className="block font-medium mb-2 text-gray-700">Reason for Application <span className='text-red-500'>*</span></label>
                 <textarea 
                   name="reason" 
                   rows="4" 

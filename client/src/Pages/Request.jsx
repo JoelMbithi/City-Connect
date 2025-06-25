@@ -113,7 +113,7 @@ const RequestsPage = () => {
                 <h2 className="text-xl font-semibold mb-4 text-[#007A33]">New Request Form</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
-                    <label className="block font-medium mb-2 text-gray-700">Title*</label>
+                    <label className="block font-medium mb-2 text-gray-700">Title<span className='text-red-500'>*</span></label>
                     <input
                       type="text"
                       name="title"
@@ -125,7 +125,7 @@ const RequestsPage = () => {
                     />
                   </div>
                   <div>
-                    <label className="block font-medium mb-2 text-gray-700">Description*</label>
+                    <label className="block font-medium mb-2 text-gray-700">Description<span className='text-red-500'>*</span></label>
                     <textarea
                       name="description"
                       rows="4"
@@ -137,7 +137,7 @@ const RequestsPage = () => {
                     />
                   </div>
                   <div>
-                    <label className="block font-medium mb-2 text-gray-700">Category*</label>
+                    <label className="block font-medium mb-2 text-gray-700">Category<span className='text-red-500'>*</span></label>
                     <select
                       name="category"
                       value={form.category}

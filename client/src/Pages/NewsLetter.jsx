@@ -78,7 +78,7 @@ const NewsletterPage = () => {
       )}
 
       {/* Newsletter Archive */}
-      <h2 className="text-2xl font-semibold text-[#007A33] mb-4">📂 Past Newsletters</h2>
+      <h2 className="text-2xl font-semibold text-[#007A33] mb-4">Past Newsletters</h2>
       <ul className="space-y-4">
         {newsletters.map((item, index) => (
           <li key={index} className="bg-white p-4 shadow rounded border border-gray-200">
