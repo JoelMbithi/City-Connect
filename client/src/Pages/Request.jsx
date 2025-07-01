@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FiPlus, FiClock, FiCheckCircle, FiAlertCircle, FiChevronDown } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
+import newRequest from '../utils/NewRequest.js';
 
 const RequestsPage = () => {
   const [form, setForm] = useState({
@@ -10,24 +11,35 @@ const RequestsPage = () => {
   });
 
   const [requests, setRequests] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showForm, setShowForm] = useState(true);
   const [filter, setFilter] = useState('All');
   const [expandedRequest, setExpandedRequest] = useState(null);
 
-  const categories = ['Service', 'Event', 'Complaint', 'Other'];
   const statusOptions = ['Pending', 'In Progress', 'Resolved'];
   const filters = ['All', ...statusOptions];
 
-  // Load saved requests from localStorage
   useEffect(() => {
+    // Load saved requests from localStorage
     const savedRequests = localStorage.getItem('userRequests');
     if (savedRequests) {
       setRequests(JSON.parse(savedRequests));
     }
+
+    // Fetch categories from backend
+    const fetchCategories = async () => {
+      try {
+        const res = await newRequest.get("/request/allRequestType"); // Should return [{id, name}]
+        setCategories(res.data.data);
+      } catch (err) {
+        console.error("Failed to fetch categories:", err);
+      }
+    };
+
+    fetchCategories();
   }, []);
 
-  // Save requests to localStorage when they change
   useEffect(() => {
     localStorage.setItem('userRequests', JSON.stringify(requests));
   }, [requests]);
@@ -37,37 +49,45 @@ const RequestsPage = () => {
     setForm(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate API call delay
-    setTimeout(() => {
-      const newRequest = {
+    try {
+      const res = await newRequest.post("/request/createRequest", form);
+      const category = categories.find(cat => cat.id === parseInt(form.category));
+
+      const newReq = {
         id: Date.now(),
-        ...form,
+        title: form.title,
+        description: form.description,
+        category: form.category,
+        category: category?.name || 'Unknown',
         status: 'Pending',
         submittedAt: new Date().toLocaleString(),
         updatedAt: new Date().toLocaleString(),
       };
 
-      setRequests(prev => [newRequest, ...prev]);
+      setRequests(prev => [newReq, ...prev]);
       setForm({ title: '', description: '', category: '' });
-      setIsSubmitting(false);
       setShowForm(false);
-    }, 1000);
+    } catch (error) {
+      console.error("Failed to submit request", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const toggleRequestExpand = (id) => {
     setExpandedRequest(expandedRequest === id ? null : id);
   };
 
-  const filteredRequests = requests.filter(request => 
+  const filteredRequests = requests.filter(request =>
     filter === 'All' || request.status === filter
   );
 
   const getStatusIcon = (status) => {
-    switch(status) {
+    switch (status) {
       case 'Pending': return <FiClock className="mr-1" />;
       case 'In Progress': return <FiAlertCircle className="mr-1" />;
       case 'Resolved': return <FiCheckCircle className="mr-1" />;
@@ -78,7 +98,7 @@ const RequestsPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800 p-4 md:p-8">
       {/* Page Header */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="text-center mb-8 md:mb-12"
@@ -132,7 +152,7 @@ const RequestsPage = () => {
                       value={form.description}
                       onChange={handleChange}
                       required
-                      placeholder="Please provide detailed information about your request"
+                      placeholder="Detailed info about your request"
                       className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#007A33] focus:border-transparent"
                     />
                   </div>
@@ -146,8 +166,8 @@ const RequestsPage = () => {
                       className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#007A33] focus:border-transparent"
                     >
                       <option value="">Select a category</option>
-                      {categories.map((cat) => (
-                        <option key={cat} value={cat}>{cat}</option>
+                      {categories.map((cat,index) => (
+                        <option key={index} value={cat.id}>{cat.name}</option>
                       ))}
                     </select>
                   </div>
@@ -197,7 +217,7 @@ const RequestsPage = () => {
             {filteredRequests.length === 0 ? (
               <div className="text-center py-8">
                 <p className="text-gray-500">
-                  {filter === 'All' 
+                  {filter === 'All'
                     ? "You haven't submitted any requests yet."
                     : `No ${filter.toLowerCase()} requests found.`}
                 </p>
@@ -205,7 +225,7 @@ const RequestsPage = () => {
             ) : (
               <div className="space-y-3">
                 {filteredRequests.map((req) => (
-                  <motion.div 
+                  <motion.div
                     key={req.id}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}

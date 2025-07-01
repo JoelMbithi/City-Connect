@@ -37,7 +37,7 @@ const Dashboard = () => {
             </button>
             <div className="flex items-center">
               <img className="h-8 w-8 rounded-full" src="https://via.placeholder.com/150" alt="User profile" />
-              <span className="ml-2 text-sm font-medium text-gray-700">John Doe</span>
+              <span className="ml-2 text-sm font-medium text-gray-700">Joe</span>
             </div>
           </div>
         </div>

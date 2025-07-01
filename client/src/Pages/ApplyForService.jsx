@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FiChevronDown, FiClock, FiCheckCircle, FiAlertCircle, FiPlus } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
+import newRequest from '../utils/NewRequest';
 
 const ApplyForServicePage = () => {
   const [form, setForm] = useState({
@@ -50,19 +51,20 @@ const ApplyForServicePage = () => {
     setForm(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     // Simulate API call delay
     setTimeout(() => {
-      const newApp = {
+      const res =  newRequest.post('/service/apply', form);
+      /* const newApp = {
         id: Date.now(),
         ...form,
         submittedAt: new Date().toLocaleString(),
         updatedAt: new Date().toLocaleString(),
         status: 'Pending',
-      };
+      }; */
 
       setApplications(prev => [newApp, ...prev]);
       setForm({

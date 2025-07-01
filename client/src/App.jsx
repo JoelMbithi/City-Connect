@@ -11,6 +11,7 @@ import NewsLetter from './Pages/NewsLetter';
 import SupportPage from './Pages/Support';
 import RequestsPage from './Pages/Request';
 import ApplyForServicePage from './Pages/ApplyForService';
+import AdminNavbar from '../src/Admin/Dashboard';
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
         <Route path='support' element={<SupportPage/>} />
         <Route path='requests' element={<RequestsPage/>} />
         <Route path='apply' element={<ApplyForServicePage/>} />
+        <Route path="Admin/dashboard" element={<AdminNavbar/>} />
       </Routes>
 
       <Footer />

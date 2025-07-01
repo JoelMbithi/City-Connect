@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiFileText, FiClock, FiBell, FiCheckCircle } from 'react-icons/fi';
 import { FiEdit, FiFile, FiCalendar, FiMessageCircle } from 'react-icons/fi';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import newRequest from '../../utils/NewRequest';
+
 
 
 // Reusable summary card component with animations
@@ -101,7 +105,9 @@ const AnnouncementCard = ({ title, message, date, priority = 'normal' }) => {
 
 // Main Dashboard component
 const UserDashboard = () => {
-  const userName = 'Joe'; // Replace with dynamic user name
+ const [user,setUser] = useState(0)
+ const [request,setRequest] = useState(0)
+
   const userActivities = [
     { id: 1, date: '2025-06-24', action: 'Garbage Collection', status: 'Completed' },
     { id: 2, date: '2025-06-22', action: 'Business Permit Application', status: 'Pending' },
@@ -123,13 +129,53 @@ const UserDashboard = () => {
     },
   ];
 
+
+    const fetchUser = async () => {
+    const user_id = localStorage.getItem("user");
+
+    if(!user_id) { return; }
+
+    const user = JSON.parse(user_id);
+    try {
+      const res = await newRequest.get(`/user/getSingleUser/${user.user_id}`)
+     // console.log(res.data.user)
+      setUser(res.data.user)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  //fetch request
+   const fetchRequest = async () => {
+    try {
+       const res  = await newRequest.get('/request/allRequest')
+       console.log(res.data.data)
+       setRequest(res.data.data)
+    } catch (error) {
+      console.log(error)
+    }
+   }
+
+
+  useEffect(() => {
+    fetchUser(),
+    fetchRequest()
+  },[])
+
   return (
     <div className="p-4 md:p-8 bg-gray-50 min-h-screen">
       {/* Welcome message */}
-      <div className="mb-8">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Welcome back, {userName}!</h1>
+  
+       <div className="mb-8">
+           
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Welcome back,
+          {user && (
+         <span>{user.name}</span>
+          )}
+          !</h1>
         <p className="text-gray-600 mt-2">Here's what's happening with your account today.</p>
       </div>
+   
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -139,12 +185,15 @@ const UserDashboard = () => {
   icon={<FiFileText size={20} />} 
   color="blue" 
 />
-<SummaryCard 
+{/* request */}
+{request &&  (
+  <SummaryCard 
   title="Pending Requests" 
-  count={1} 
+  count={ request.length} 
   icon={<FiClock size={20} className='text-orange-500' />} 
   color="orange" 
 />
+)}
 <SummaryCard 
   title="Notifications" 
   count={2} 

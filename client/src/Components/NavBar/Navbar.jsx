@@ -3,12 +3,14 @@ import { Link, useLocation } from 'react-router-dom';
 import LoginPopup from '../PopUp/LoginPopup';
 import DropdownLink from '../DropDown/DropDown';
 import logo from "../../assets/NairobiConnect.png"
+import newRequest from '../../utils/NewRequest';
+import { useEffect } from 'react';
 
 const AdminNavbar = () => {
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [popUp,setPopUp] = useState(false)
- 
+  const [user,setUser] = useState(0)
 
    
 
@@ -27,6 +29,24 @@ const AdminNavbar = () => {
 //close popup
 
   const handleClose = () => setPopUp(false)
+
+const fetchUser = async () => {
+  const userData = localStorage.getItem("user");
+  if (!userData) return;
+
+  const user = JSON.parse(userData); // Parse the stored string into an object
+
+  try {
+    const res = await newRequest.get(`/user/getSingleUser/${user.user_id}`);
+    setUser(res.data.user);
+  } catch (error) {
+    console.log("Error fetching user:", error);
+  }
+};
+
+ useEffect(() => {
+  fetchUser();
+}, []); 
 
   return (
     <nav className="bg-[#007A33] text-white shadow-md sticky top-0 z-50 w-full ">
@@ -101,13 +121,47 @@ const AdminNavbar = () => {
               <div className="ml-4 flex items-center space-x-4">
               <Link to="/" className="hidden lg:flex text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">View Public Site</Link>
               
-              <Link
-              
-                onClick={handleShow}
-                className="bg-transparent hover:bg-[#FFD100] text-[#FFD100] hover:text-black px-3 py-2 rounded-md text-sm font-medium border border-[#FFD100]"
-              >
-                Login
-              </Link>
+            {user && user.name ? (
+  <div className="relative group">
+    <button className="text-white font-semibold px-3 py-2 rounded-md">
+      {user.name}
+    </button>
+
+    {/* Dropdown on hover */}
+    <div className="absolute right-0 mt-2 w-40 bg-white text-black rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
+      <Link
+        to="/profile"
+        className="block px-4 py-2 text-sm hover:bg-gray-100"
+      >
+        Profile
+      </Link>
+      <button
+        onClick={() => {
+          localStorage.clear(); 
+          setUser(null);       
+          window.location.reload(); 
+        }}
+        className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+      >
+        Logout
+      </button>
+    </div>
+  </div>
+) : (
+  <>
+    <button
+      onClick={handleShow}
+      className="bg-transparent hover:bg-[#FFD100] text-[#FFD100] hover:text-black px-3 py-2 rounded-md text-sm font-medium border border-[#FFD100]"
+    >
+      Login
+    </button>
+    {popUp && <LoginPopup onClose={handleClose} />}
+  </>
+)}
+
+               
+             
+             
           {/*  pop shadow */}
            {popUp && (
            <LoginPopup onClose={handleClose} />

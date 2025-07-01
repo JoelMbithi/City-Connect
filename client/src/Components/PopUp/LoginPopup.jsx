@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import newRequest from '../../utils/NewRequest';
+import { useNavigate } from "react-router-dom";
+import MessagePopup from './MessagePopup';
+
 
 const MODE = {
   LOGIN: "LOGIN",
@@ -10,11 +14,15 @@ const MODE = {
 const LoginPopup = ({onClose}) => {
   const [mode, setMode] = useState(MODE.LOGIN);
    const [showPopup,setShowPopup] = useState(false)
+   const navigate = useNavigate();
+
+   const handlePopUpMessage = () => setShowPopup(true)
+
   const [form, setForm] = useState({
-    username: "",
+    name: "",
     email: "",
     password: "",
-    code: ""
+    role: ""
   });
 
   const formTitle =
@@ -40,12 +48,84 @@ const LoginPopup = ({onClose}) => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
+   const handleRegister = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await newRequest.post("/register/create", form);
+      console.log("Registered:", response.data.data);
+
+      // Auto login after registration
+      const res = await newRequest.post("/register/login", {
+        email: form.email,
+        password: form.password,
+      });
+
+      const user = res.data.user;
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("token", res.data.token);
+
+      if (user.role === "Admin") {
+        navigate("/Admin/dashboard");
+      } else {
+        navigate("/");
+      }
+
+      if (res.data.status === "success") {
+        
+        {showPopup && (
+          <MessagePopup/>
+        )}
+        setTimeout(() => {
+          setShowPopup(false);
+          onClose();
+        }, 2000);
+      }
+
+    } catch (error) {
+      console.log("Register error:", error.response?.data || error.message);
+    }
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await newRequest.post("/register/login", {
+        email: form.email,
+        password: form.password,
+      });
+
+      const user = res.data.user;
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("token", res.data.token);
+
+      if (user.role === "Admin") {
+        navigate("/Admin/dashboard");
+      } else {
+        navigate("/");
+      }
+
+      if (res.data.status === "success") {
+        
+         {showPopup && (
+          <MessagePopup/>
+        )}
+        setTimeout(() => {
+          setShowPopup(false);
+          onClose();
+        }, 2000);
+      }
+
+    } catch (error) {
+      console.log("Login error:", error.response?.data || error.message);
+    }
+  };
+
   return (
     <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
       
       <div className="h-[calc(90vh-80px)] px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 flex items-center mt-2 justify-center">
        
-        <form className="flex flex-col gap-8 ring-2 p-4 rounded-md backdrop-blur  bg-green-700">
+        <form onSubmit={mode === MODE.LOGIN ? handleLogin : handleRegister} className="flex flex-col gap-8 ring-2 p-4 rounded-md backdrop-blur  bg-green-700">
          <div className='flex  flex-row  justify-between'>
            <h1 className="text-2xl font-semibold">{formTitle}</h1>
              <h1 onClick={onClose} className='top-2  right-0  text-lg font-semibold cursor-pointer text-white'>X</h1>
@@ -56,16 +136,24 @@ const LoginPopup = ({onClose}) => {
               <input
                 className="ring-2 ring-gray-300 rounded-md p-4"
                 type="text"
-                name="username"
+                name="name"
                 placeholder="joe"
-                value={form.username}
+                value={form.name}
                 onChange={handleChange}
               />
                <div className='flex mt-3 flex-row items-center justify-between'>
                 <label className="text-sm text-white">Role</label>
-              <select name="" id=""  className="ring-2 ring-gray-300 rounded-md p-2" >
-                <option value="" className=' bg-amber-400 text-white text-sm'>User</option>
-                <option value="" className='text-sm bg-amber-400 text-white '>Admin</option>
+              <select
+                name="role"
+                id="role"
+                className="ring-2 ring-gray-300 rounded-md p-2"
+                value={form.role}
+                onChange={handleChange}
+              >
+                <option value="" disabled>Select role</option>
+                <option value="User" className='bg-amber-400 text-white text-sm'>User</option>
+                <option value="Admin" className='text-sm bg-amber-400 text-white'>Stuff</option>
+                <option value="Admin" className='text-sm bg-amber-400 text-white'>Admin</option>
               </select>
                </div>
             </div>
@@ -89,9 +177,9 @@ const LoginPopup = ({onClose}) => {
               <input
                 className="ring-2 ring-gray-300 rounded-md p-4"
                 type="text"
-                name="code"
-                placeholder="Enter verification code"
-                value={form.code}
+                name="role"
+                placeholder="Enter verification role"
+                value={form.role}
                 onChange={handleChange}
               />
             </div>
