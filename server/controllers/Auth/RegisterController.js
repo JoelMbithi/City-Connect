@@ -69,14 +69,19 @@ export const loginUser = async(req,res) => {
     
     try {
         //check if  user exist
-        const userExist = await db.query(`
-            SELECT * FROM users WHERE email = $1`,[email])
-            if(userExist.rows.length === 0 ){
-                return res.status(403).json({
-                    status:"error",
-                    message:"User does not exist"
-                })
-            }
+       const userExist = await db.query(`
+  SELECT users.user_id, users.name, users.email, users.password, roles.name AS role
+  FROM users
+  JOIN roles ON users.role_id = roles.id
+  WHERE users.email = $1
+`, [email]);
+
+        if (userExist.rows.length === 0) {
+        return res.status(404).json({
+            status: "error",
+            message: "User not found",
+        });
+        }
    const user = userExist.rows[0]
 
    //compare password
