@@ -9,6 +9,9 @@ import serviceApplicationRouter from './Routes/ApplicationRoutes/ApplyServicerou
 import requestRouter from './Routes/ApplicationRoutes/Request/RequestRoute.js'
 import eventApplicationRoute from './Routes/ApplicationRoutes/EventApplicationRoute.js '
 import requestTypeRouter from './Routes/ApplicationRoutes/Request/RequestTypeRoute.js'
+import serviceType from  './Routes/ApplicationRoutes/Service/ServiceTypeRoute.js'
+
+
 dotenv.config()
 
 const app = express()
@@ -30,6 +33,7 @@ app.use('/api/applyService',serviceApplicationRouter)
 app.use('/api/request',requestRouter)
 app.use('/api/eventApplication',eventApplicationRoute)
 app.use('/api/requestType', requestTypeRouter)
+app.use('/api/serviceType',serviceType)
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

@@ -1,4 +1,4 @@
-import db from '../../utils/db.js';
+import db from '../../../utils/db.js';
 
 // create applications for a user
 export const applyService = async (req, res) => {
@@ -34,8 +34,8 @@ export const allAppliedServices = async (req, res) => {
         const getApplication = await db.query(
             `SELECT a.*
             FROM application a
-            INNER JOIN application_service s ON s.id = a.application_id
-            WHERE s.id = $1
+            INNER JOIN application_service s ON s.application_service_id = a.application_id
+            WHERE s.application_service_id = $1
 `,[service_id]
         )
 
