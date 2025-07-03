@@ -1,7 +1,7 @@
 import db from '../../utils/db.js';
 
 export const applyRequest = async (req, res) => {
-  const { title, description, category } = req.body;
+  const { title, description, category,user_id } = req.body;
 
   console.log("🟡 Received data:", { title, description, category });
 
@@ -26,11 +26,12 @@ export const applyRequest = async (req, res) => {
     console.log(" Resolved request_type_id:", request_type_id);
 
     // Step 2: Insert the request
-    const result = await db.query(
-      `INSERT INTO request (title, description, request_type_id)
-       VALUES ($1, $2, $3) RETURNING *`,
-      [title, description, request_type_id]
-    );
+  const result = await db.query(
+  `INSERT INTO request (title, description, request_type_id, user_id)
+   VALUES ($1, $2, $3, $4) RETURNING *`,
+  [title, description, request_type_id, user_id]
+);
+
 
     console.log(" Insert result:", result.rows[0]);
 
@@ -50,37 +51,44 @@ export const applyRequest = async (req, res) => {
 
 
 // 2. Get single request by ID
+//  2. Get all requests by user ID
 export const singleRequest = async (req, res) => {
-  const { request_id } = req.params;
+  const { user_id } = req.params;
 
   try {
     const result = await db.query(
-      `SELECT * FROM request WHERE id = $1`,
-      [request_id]
+      `SELECT r.*, rt.name AS category
+       FROM request r
+       INNER JOIN request_types rt ON r.request_type_id = rt.request_type_id
+       WHERE r.user_id = $1
+       ORDER BY r.created_at DESC`,
+      [user_id]
     );
 
     if (result.rows.length === 0) {
-      return res.status(404).json({
-        status: "error",
-        message: "Request not found",
+      return res.status(200).json({
+        status: "success",
+        message: "No requests found for this user",
+        data: [], // Return empty array if none
       });
     }
 
     res.status(200).json({
       status: "success",
-      message: "Successfully retrieved request",
-      data: result.rows[0],
+      message: "Successfully retrieved user requests",
+      data: result.rows, // ✅ Return all user requests
     });
   } catch (error) {
-    console.error("Failed to get single request:", error);
+    console.error("Failed to get user requests:", error);
     res.status(500).json({
       status: "error",
-      message: "Server error while getting single request",
+      message: "Server error while getting user requests",
     });
   }
 };
 
-// ✅ 3. Get all requests
+
+//  3. Get all requests
 export const allRequest = async (req, res) => {
   try {
     const result = await db.query(`SELECT * FROM request ORDER BY request_id DESC`);

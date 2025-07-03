@@ -3,7 +3,8 @@ import { allApplication } from '../../controllers/Application/ApplicationControl
 
 const router = express.Router()
 
-router.get('/allApplication',allApplication)
+router.get('/user/:user_id/applications', allApplication);
+
 
 
 export default router
