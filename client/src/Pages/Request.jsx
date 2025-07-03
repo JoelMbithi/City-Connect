@@ -10,7 +10,7 @@ const RequestsPage = () => {
     category: '',
   });
 
-  const [requests, setRequests] = useState([]);
+  const [applications, setApplications] = useState([]); // ✅ Holds fetched requests
   const [categories, setCategories] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showForm, setShowForm] = useState(true);
@@ -21,28 +21,16 @@ const RequestsPage = () => {
   const filters = ['All', ...statusOptions];
 
   useEffect(() => {
-    // Load saved requests from localStorage
-    const savedRequests = localStorage.getItem('userRequests');
-    if (savedRequests) {
-      setRequests(JSON.parse(savedRequests));
-    }
-
-    // Fetch categories from backend
     const fetchCategories = async () => {
       try {
-        const res = await newRequest.get("/request/allRequestType"); // Should return [{id, name}]
+        const res = await newRequest.get("/request/allRequestType");
         setCategories(res.data.data);
       } catch (err) {
         console.error("Failed to fetch categories:", err);
       }
     };
-
     fetchCategories();
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem('userRequests', JSON.stringify(requests));
-  }, [requests]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -54,23 +42,25 @@ const RequestsPage = () => {
     setIsSubmitting(true);
 
     try {
-      const res = await newRequest.post("/request/createRequest", form);
-      const category = categories.find(cat => cat.id === parseInt(form.category));
+      const storedUser = localStorage.getItem("user_id");
+      if (!storedUser) {
+        console.error("User ID not found in localStorage");
+        return;
+      }
 
-      const newReq = {
-        id: Date.now(),
-        title: form.title,
-        description: form.description,
-        category: form.category,
-        category: category?.name || 'Unknown',
-        status: 'Pending',
-        submittedAt: new Date().toLocaleString(),
-        updatedAt: new Date().toLocaleString(),
-      };
+      const user_id = JSON.parse(storedUser);
 
-      setRequests(prev => [newReq, ...prev]);
+      const res = await newRequest.post("/request/createRequest", {
+        ...form,
+        user_id,
+      });
+
       setForm({ title: '', description: '', category: '' });
       setShowForm(false);
+
+      // ✅ Refetch requests after submission
+      fetchUserApplication();
+
     } catch (error) {
       console.error("Failed to submit request", error);
     } finally {
@@ -78,11 +68,46 @@ const RequestsPage = () => {
     }
   };
 
+  const fetchUserApplication = async () => {
+    const storedUser = localStorage.getItem("user_id");
+    if (!storedUser) return;
+
+    const user_id = JSON.parse(storedUser);
+
+    try {
+      const res = await newRequest.get(`/request/singleRequest/${user_id}/applications`);
+      const rawRequests = res.data.data;
+
+      // Map category ID to name
+      const enriched = rawRequests.map(req => {
+        const categoryName = categories.find(c => c.request_type_id === req.request_type_id)?.name || 'Unknown';
+        return {
+          id: req.request_id,
+          title: req.title,
+          description: req.description,
+          category: categoryName,
+          status: req.status || 'Pending',
+          submittedAt: new Date(req.created_at).toLocaleString(),
+          updatedAt: new Date(req.updated_at).toLocaleString(),
+        };
+      });
+
+      setApplications(enriched);
+    } catch (error) {
+      console.error("Error fetching user applications:", error);
+      setApplications([]);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserApplication();
+  }, [categories]); // Ensure categories are loaded before mapping
+
   const toggleRequestExpand = (id) => {
     setExpandedRequest(expandedRequest === id ? null : id);
   };
 
-  const filteredRequests = requests.filter(request =>
+  const filteredRequests = applications.filter(request =>
     filter === 'All' || request.status === filter
   );
 
@@ -97,7 +122,6 @@ const RequestsPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800 p-4 md:p-8">
-      {/* Page Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -108,7 +132,6 @@ const RequestsPage = () => {
       </motion.div>
 
       <div className="max-w-6xl mx-auto">
-        {/* Toggle Form Button */}
         <div className="flex justify-end mb-4">
           <button
             onClick={() => setShowForm(!showForm)}
@@ -119,7 +142,6 @@ const RequestsPage = () => {
           </button>
         </div>
 
-        {/* Request Form */}
         <AnimatePresence>
           {showForm && (
             <motion.div
@@ -166,8 +188,8 @@ const RequestsPage = () => {
                       className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#007A33] focus:border-transparent"
                     >
                       <option value="">Select a category</option>
-                      {categories.map((cat,index) => (
-                        <option key={index} value={cat.id}>{cat.name}</option>
+                      {categories.map((cat, index) => (
+                        <option key={index} value={cat.name}>{cat.name}</option>
                       ))}
                     </select>
                   </div>

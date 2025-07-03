@@ -16,7 +16,7 @@ const Footer = () => {
     <footer className="bg-[#007A33] text-white pt-10">
       <div className="max-w-6xl mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
         {/* About */}
-        <div>
+        <div className='hidden md:block'>
           <h3 className="text-xl font-bold mb-4">CityConnect</h3>
           <p className="text-gray-200">
             Bridging the gap between your council and community.  
@@ -25,7 +25,7 @@ const Footer = () => {
         </div>
 
         {/* Quick Links */}
-        <div>
+        <div className='hidden md:block'>
           <h4 className="text-lg font-semibold mb-3">Quick Links</h4>
           <ul className="space-y-2">
             {['Home', 'Notice', 'Events', 'Feedback', 'Support'].map((item) => (

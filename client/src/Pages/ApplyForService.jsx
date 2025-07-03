@@ -5,13 +5,13 @@ import newRequest from '../utils/NewRequest';
 
 const ApplyForServicePage = () => {
   const [form, setForm] = useState({
-    serviceType: '',
-    fullName: '',
-    idNumber: '',
-    phone: '',
+    type: '',
+    name: '',
+    IDNumber: '',
+    phoneNumber: '',
     email: '',
-    address: '',
-    reason: '',
+    location: '',
+    description: '',
   });
 
   const [applications, setApplications] = useState([]);
@@ -20,15 +20,8 @@ const ApplyForServicePage = () => {
   const [expandedApp, setExpandedApp] = useState(null);
   const [filter, setFilter] = useState('All');
 
-  const serviceTypes = [
-    'Water Connection',
-    'Electricity Connection',
-    'Business License',
-    'Permit Request',
-    'Building Approval',
-    'Waste Collection',
-    'Parking Permit'
-  ];
+  const [serviceTypes,setServiceTypes] = useState([]);
+   
 
   const statusOptions = ['Pending', 'In Review', 'Approved', 'Rejected'];
   const filters = ['All', ...statusOptions];
@@ -51,38 +44,46 @@ const ApplyForServicePage = () => {
     setForm(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setIsSubmitting(true);
 
-    // Simulate API call delay
-    setTimeout(() => {
-      const res =  newRequest.post('/service/apply', form);
-      /* const newApp = {
-        id: Date.now(),
-        ...form,
-        submittedAt: new Date().toLocaleString(),
-        updatedAt: new Date().toLocaleString(),
-        status: 'Pending',
-      }; */
+  const storedUser = localStorage.getItem("user_id");
+  const user_id = storedUser ? JSON.parse(storedUser) : null;
 
-      setApplications(prev => [newApp, ...prev]);
-      setForm({
-        serviceType: '',
-        fullName: '',
-        idNumber: '',
-        phone: '',
-        email: '',
-        address: '',
-        reason: '',
-      });
-      setIsSubmitting(false);
-      setSubmitSuccess(true);
-      
-      // Hide success message after 5 seconds
-      setTimeout(() => setSubmitSuccess(false), 5000);
-    }, 1500);
-  };
+  if (!user_id) {
+    alert("User ID not found. Please log in again.");
+    setIsSubmitting(false);
+    return;
+  }
+
+  try {
+    const res = await newRequest.post('/applyService/createService', {
+      ...form,
+      user_id, // ✅ Make sure this is sent to the backend
+    });
+
+    console.log("Submitted with user_id:", user_id); // ✅ Log it for confirmation
+    setSubmitSuccess(true);
+    fetchUserApplication(); // refresh app list
+  } catch (error) {
+    console.error("Submission error:", error.response?.data || error.message);
+  }
+
+  setForm({
+    type: '',
+    name: '',
+    IDNumber: '',
+    phoneNumber: '',
+    email: '',
+    location: '',
+    description: '',
+  });
+
+  setIsSubmitting(false);
+  setTimeout(() => setSubmitSuccess(false), 5000);
+};
+
 
   const toggleAppExpand = (id) => {
     setExpandedApp(expandedApp === id ? null : id);
@@ -101,6 +102,51 @@ const ApplyForServicePage = () => {
       default: return null;
     }
   };
+
+  //fetch Services
+
+  const fetchService = async () => {
+    try {
+      const res = await newRequest.get('/serviceType/allServiceTypes');
+      
+        console.log( res.data.data)
+          setServiceTypes(res.data.data)
+    } catch (error) {
+      console.log('Error fetching services:', error);
+    }
+  }
+
+///fetch aplication
+
+const fetchUserApplication = async () => {
+  const storedUser = localStorage.getItem("user_id");
+  if (!storedUser) return;
+
+  const user_id = JSON.parse(storedUser);
+
+  try {
+    const res = await newRequest.get(`/applyService/user/${user_id}/applications`);
+    setApplications(res.data.data); // Save in state
+  } catch (error) {
+    console.error("Error fetching user applications:", error);
+    setApplications([]); // Optional: Clear on error
+  }
+};
+
+//fetch user applications
+
+const fetchApplication = async () => {
+  try {
+    const res = await newRequest('/applyService/')
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+  useEffect(() => {
+    fetchService();
+    fetchUserApplication()
+  }, []); 
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8 text-gray-800">
@@ -134,15 +180,15 @@ const ApplyForServicePage = () => {
               <div>
                 <label className="block font-medium mb-2 text-gray-700">Service Type <span className='text-red-500'>*</span></label>
                 <select
-                  name="serviceType"
-                  value={form.serviceType}
+                  name="type"
+                  value={form.type}
                   onChange={handleChange}
                   required
                   className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#007A33] focus:border-transparent"
                 >
                   <option value="">-- Select Service --</option>
-                  {serviceTypes.map(service => (
-                    <option key={service} value={service}>{service}</option>
+                  {serviceTypes.map((service,index) => (
+                    <option key={index} value={service.name}>{service.name}</option>
                   ))}
                 </select>
               </div>
@@ -152,8 +198,8 @@ const ApplyForServicePage = () => {
                   <label className="block font-medium mb-2 text-gray-700">Full Name <span className='text-red-500'>*</span></label>
                   <input 
                     type="text" 
-                    name="fullName" 
-                    value={form.fullName} 
+                    name="name" 
+                    value={form.name} 
                     onChange={handleChange} 
                     required 
                     placeholder="Your full name"
@@ -164,8 +210,8 @@ const ApplyForServicePage = () => {
                   <label className="block font-medium mb-2 text-gray-700">ID/Passport Number <span className='text-red-500'>*</span></label>
                   <input 
                     type="text" 
-                    name="idNumber" 
-                    value={form.idNumber} 
+                    name="IDNumber" 
+                    value={form.IDNumber} 
                     onChange={handleChange} 
                     required 
                     placeholder="National ID or Passport"
@@ -176,8 +222,8 @@ const ApplyForServicePage = () => {
                   <label className="block font-medium mb-2 text-gray-700">Phone Number  <span className='text-red-500'>*</span></label>
                   <input 
                     type="tel" 
-                    name="phone" 
-                    value={form.phone} 
+                    name="phoneNumber" 
+                    value={form.phoneNumber} 
                     onChange={handleChange} 
                     required 
                     placeholder="Phone number with country code"
@@ -192,7 +238,7 @@ const ApplyForServicePage = () => {
                     value={form.email} 
                     onChange={handleChange} 
                     required 
-                    placeholder="Your email address"
+                    placeholder="Your email location"
                     className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#007A33] focus:border-transparent" 
                   />
                 </div>
@@ -202,11 +248,11 @@ const ApplyForServicePage = () => {
                 <label className="block font-medium mb-2 text-gray-700">Address / Location <span className='text-red-500'>*</span></label>
                 <input 
                   type="text" 
-                  name="address" 
-                  value={form.address} 
+                  name="location" 
+                  value={form.location} 
                   onChange={handleChange} 
                   required 
-                  placeholder="Physical address where service is needed"
+                  placeholder="Physical location where service is needed"
                   className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#007A33] focus:border-transparent" 
                 />
               </div>
@@ -214,9 +260,9 @@ const ApplyForServicePage = () => {
               <div>
                 <label className="block font-medium mb-2 text-gray-700">Reason for Application <span className='text-red-500'>*</span></label>
                 <textarea 
-                  name="reason" 
+                  name="description" 
                   rows="4" 
-                  value={form.reason} 
+                  value={form.description} 
                   onChange={handleChange} 
                   required 
                   placeholder="Explain why you need this service"
@@ -300,7 +346,7 @@ const ApplyForServicePage = () => {
                           {getStatusIcon(app.status)}
                           {app.status}
                         </span>
-                        <span className="ml-4 font-medium">{app.serviceType}</span>
+                        <span className="ml-4 font-medium">{app.type}</span>
                       </div>
                       <div className="flex items-center">
                         <span className="text-sm text-gray-500 mr-3 hidden sm:inline">
@@ -324,15 +370,15 @@ const ApplyForServicePage = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 pb-4 border-t">
                               <div>
                                 <h4 className="font-medium mb-2">Applicant Information:</h4>
-                                <p className="text-gray-700">{app.fullName}</p>
-                                <p className="text-gray-700">ID: {app.idNumber}</p>
-                                <p className="text-gray-700">Phone: {app.phone}</p>
+                                <p className="text-gray-700">{app.name}</p>
+                                <p className="text-gray-700">ID: {app.IDNumber}</p>
+                                <p className="text-gray-700">Phone: {app.phoneNumber}</p>
                                 <p className="text-gray-700">Email: {app.email}</p>
                               </div>
                               <div>
                                 <h4 className="font-medium mb-2">Service Details:</h4>
-                                <p className="text-gray-700">Address: {app.address}</p>
-                                <p className="text-gray-700">Reason: {app.reason}</p>
+                                <p className="text-gray-700">Address: {app.location}</p>
+                                <p className="text-gray-700">Reason: {app.description}</p>
                               </div>
                             </div>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
