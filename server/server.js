@@ -10,6 +10,9 @@ import requestRouter from './Routes/ApplicationRoutes/Request/RequestRoute.js'
 import eventApplicationRoute from './Routes/ApplicationRoutes/EventApplicationRoute.js '
 import requestTypeRouter from './Routes/ApplicationRoutes/Request/RequestTypeRoute.js'
 import serviceType from  './Routes/ApplicationRoutes/Service/ServiceTypeRoute.js'
+import eventRoute from './Routes/EventsRoutes/EventApplicationRoutes.js' 
+import supportRouter from './Routes/SupportRoutes/SopportRequest.js'
+import feedbackRouter from './Routes/SupportRoutes/FeedbackRoute.js'
 
 
 dotenv.config()
@@ -34,6 +37,9 @@ app.use('/api/request',requestRouter)
 app.use('/api/eventApplication',eventApplicationRoute)
 app.use('/api/requestType', requestTypeRouter)
 app.use('/api/serviceType',serviceType)
+app.use('/api/events', eventRoute)
+app.use('/api/support',supportRouter)
+app.use('/api/feedback',feedbackRouter)
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
