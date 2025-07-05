@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiChevronDown, FiMail, FiPhone, FiMapPin, FiSend, FiClock } from 'react-icons/fi';
+import newRequest from '../utils/NewRequest';
 
 const faqs = [
   {
@@ -31,7 +32,8 @@ const SupportPage = () => {
     name: '',
     email: '',
     subject: '',
-    message: ''
+    message: '',
+    user_id:'',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -48,24 +50,36 @@ const SupportPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitSuccess(true);
+    try {
+      const storedUser = JSON.parse(localStorage.getItem('user' ))
+      if(!storedUser) {
+        console.log("No user data found in localStorage");
+        setIsSubmitting(false);
+        return;
+      }
+    const user_id = storedUser.user_id || storedUser.id;
+      const res = await newRequest.post('/support/sendSupport',{
+        ...formData,
+        user_id
+      })
+
       setFormData({
         name: '',
-        email: '',
+        email: '',  
         subject: '',
-        message: ''
+        message: '',
+        user_id: ''
       });
-      
-      // Reset success message after 5 seconds
-      setTimeout(() => setSubmitSuccess(false), 5000);
-    }, 1500);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setIsSubmitting(false);
+      return;
+    }
+    setIsSubmitting(false);
   };
 
   return (

@@ -95,8 +95,10 @@ const LoginPopup = ({ onClose }) => {
       localStorage.setItem("token", res.data.token);
 
       if (user.role === "Admin") {
+        window.location.reload();
         navigate("/Admin/dashboard");
       } else {
+        window.location.reload();
         navigate("/");
       }
 

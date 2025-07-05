@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
-
+import newRequest from '../../../client/src/utils/NewRequest.js'
 const NewsletterPage = () => {
   const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
+  
   const [error, setError] = useState('');
-
+const [subscribed, setSubscribed] = useState(false);
+  
+  const [form,setForm] = useState({
+    email: '',
+    user_id: ''
+  })
   const newsletters = [
     {
       title: 'March 2025 Newsletter',
@@ -23,20 +28,39 @@ const NewsletterPage = () => {
     },
   ];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Basic email validation
-    if (!email || !email.includes('@')) {
-      setError('Please enter a valid email address.');
+   try {
+    const storedUser = JSON.parse(localStorage.getItem('user'))
+    if (!storedUser){
+      setError('You must be logged in to subscribe.');
       return;
     }
+    const user_id = storedUser.user_id; // Assuming user ID is stored in localStorage
 
-    // Simulate sending to server
-    console.log('Subscribed:', email);
-    setSubscribed(true);
-    setEmail('');
-    setError('');
+    const res = await newRequest.post('/subscribe/sendSubscribe', {
+      ...form,  
+      user_id,
+    }
+    )
+    if (res.status === 200) {
+      setSubscribed(true);
+      setEmail('');
+      setError('');
+    } else {
+      setError('Subscription failed. Please try again.');
+    }
+    setForm({
+      email: '',
+      user_id: ''
+    });
+    
+   } catch (error) {
+    console.error("Subscription error:", error);
+    setError('Failed to subscribe. Please try again later.');
+    return;
+   }
   };
 
   return (
@@ -48,7 +72,7 @@ const NewsletterPage = () => {
       </p>
 
       {/* Subscription Form */}
-      {!subscribed ? (
+      {form ? (
         <form onSubmit={handleSubmit} className="mb-10 bg-white shadow p-6 rounded-md border">
           <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
             Email Address
@@ -58,9 +82,9 @@ const NewsletterPage = () => {
             id="email"
             name="email"
             className="w-full border border-gray-300 rounded px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-[#007A33]"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="e.g. you@example.com"
+            value={form.email}
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
+            placeholder="joellembithi@example.com"
             required
           />
           {error && <p className="text-red-500 text-sm mb-2">{error}</p>}

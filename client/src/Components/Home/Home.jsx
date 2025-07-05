@@ -168,11 +168,12 @@ const UserDashboard = () => {
   
        <div className="mb-8">
            
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Welcome back,
-          {user && (
-         <span>{user.name}</span>
-          )}
-          !</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+  {user && user.name 
+    ? `Welcome back, ${user.name}!`
+    : "Welcome to City Connect!"}
+</h1>
+
         <p className="text-gray-600 mt-2">Here's what's happening with your account today.</p>
       </div>
    
