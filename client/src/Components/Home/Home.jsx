@@ -190,7 +190,7 @@ const UserDashboard = () => {
 {request && (
   <SummaryCard 
     title="Pending Requests" 
-    count={request.length || 3} 
+    count={request.length || 4} 
     icon={<FiClock size={20} className="text-orange-500" />} 
     color="orange" 
   />
