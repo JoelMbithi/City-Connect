@@ -23,9 +23,12 @@ const PORT = process.env.PORT || 4000;
 
 //middleware
 app.use(cors({
-    origin:"http://localhost:5173",
-     method:['POST', 'GET', 'PUT', 'DELETE'],
-     credentials:true
+  origin: [
+    "http://localhost:5173",
+    "https://city-connect-euh1.vercel.app/" 
+  ],
+  methods: ['POST', 'GET', 'PUT', 'DELETE'],
+  credentials: true
 }))
 app.use(express.json());
 
