@@ -60,8 +60,8 @@ const AdminNavbar = () => {
                 <DropdownLink
                   label="Dashboard"
                   links={[
-                    { name: 'Overview', to: '/admin/dashboard' },
-                    { name: 'Analytics', to: '/admin/dashboard/analytics' },
+                    { name: 'Overview', to: '/' },
+                    { name: 'Analytics', to: '' },
                   ]}
                 />
                 <DropdownLink
@@ -152,13 +152,13 @@ const AdminNavbar = () => {
         {isMobileMenuOpen && (
           <div className="md:hidden w-full" id="mobile-menu">
             <div className="px-4 pt-4 pb-3 space-y-2">
-              <Link to="/admin/dashboard" className={`block px-3 py-2 rounded-md text-base font-medium ${isActive('/dashboard')}`} onClick={toggleMobileMenu}>Dashboard</Link>
+              <Link to="/" className={`block px-3 py-2 rounded-md text-base font-medium ${isActive('/dashboard')}`} onClick={toggleMobileMenu}>Dashboard</Link>
               <Link to="/notice" className={`block px-3 py-2 rounded-md text-base font-medium ${isActive('/notice')}`} onClick={toggleMobileMenu}>Notices</Link>
               <Link to="/events" className={`block px-3 py-2 rounded-md text-base font-medium ${isActive('/events')}`} onClick={toggleMobileMenu}>Events</Link>
               <Link to="/feedback" className={`block px-3 py-2 rounded-md text-base font-medium ${isActive('/feedback')}`} onClick={toggleMobileMenu}>Feedback</Link>
               <Link to="/newsletter" className={`block px-3 py-2 rounded-md text-base font-medium ${isActive('/newsletter')}`} onClick={toggleMobileMenu}>Newsletter</Link>
               <div className="border-t border-[#FFD100] pt-3">
-                <Link to="/" className="block px-3 py-2 text-base text-gray-300 hover:text-white hover:bg-[#005e27]" onClick={toggleMobileMenu}>View Public Site</Link>
+                <Link to="" className="block px-3 py-2 text-base text-gray-300 hover:text-white hover:bg-[#005e27]" onClick={toggleMobileMenu}>View Public Site</Link>
                 <button
                   onClick={() => {
                     setIsMobileMenuOpen(false);
